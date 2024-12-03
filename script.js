@@ -13,24 +13,20 @@ function updateBallPosition() {
     ball.style.top = `${ballY}px`;
 }
 
-// Ball movement handler
+// Add event listener for keyboard actions
 document.addEventListener('keydown', (event) => {
-    switch (event.key) {
-        case 'ArrowUp':
-            if (ballY > 50) ballY -= 10; // Prevent ball from leaving the top boundary
-            break;
-        case 'ArrowDown':
-            if (ballY < 450) ballY += 10; // Prevent ball from leaving the bottom boundary
-            break;
-        case 'ArrowLeft':
-            if (ballX > 10) ballX -= 10; // Prevent ball from leaving the left boundary
-            break;
-        case 'ArrowRight':
-            if (ballX < 290) ballX += 10; // Prevent ball from leaving the right boundary
-            break;
-        case ' ':
-            kickBall(); // Trigger the kickBall function when spacebar is pressed
-            return;
+    const key = event.key;
+
+    if (key === 'ArrowUp' && ballY > 50) {
+        ballY -= 10; // Move ball up
+    } else if (key === 'ArrowDown' && ballY < 450) {
+        ballY += 10; // Move ball down
+    } else if (key === 'ArrowLeft' && ballX > 10) {
+        ballX -= 10; // Move ball left
+    } else if (key === 'ArrowRight' && ballX < 290) {
+        ballX += 10; // Move ball right
+    } else if (key === ' ') {
+        kickBall(); // Spacebar to kick the ball
     }
     updateBallPosition();
 });
@@ -40,7 +36,6 @@ function kickBall() {
     const ballRect = ball.getBoundingClientRect();
     const goalRect = goal.getBoundingClientRect();
 
-    // Check if the ball is within the goal area
     if (
         ballRect.right < goalRect.right &&
         ballRect.left > goalRect.left &&
