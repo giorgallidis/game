@@ -1,84 +1,41 @@
 const ball = document.getElementById('ball');
 const scoreDisplay = document.getElementById('score');
-const messageDisplay = document.getElementById('message');
-const stadium = document.querySelector('.stadium');
 const goal = document.querySelector('.goal');
 
-let ballX, ballY; // Ball position variables
-let stadiumRect; // Stadium boundaries
+let score = 0;
 
-// Initialize Ball Position
-function initializeBallPosition() {
-    stadiumRect = stadium.getBoundingClientRect();
-
-    // Calculate the center of the stadium
-    const centerX = (stadiumRect.width - ball.offsetWidth) / 2;
-    const centerY = (stadiumRect.height - ball.offsetHeight) / 2;
-
-    // Set initial ball position
-    ballX = centerX;
-    ballY = centerY;
-
-    updateBallPosition();
-}
-
-// Update Ball Position on Screen
-function updateBallPosition() {
-    ball.style.left = `${ballX}px`;
-    ball.style.top = `${ballY}px`;
-}
-
-// Ball Movement Handler
-document.addEventListener('keydown', (event) => {
-    const key = event.key;
-
-    switch (key) {
-        case 'ArrowUp':
-            if (ballY > 0) ballY -= 10; // Prevent moving out of the top
-            break;
-        case 'ArrowDown':
-            if (ballY < stadiumRect.height - ball.offsetHeight) ballY += 10; // Prevent moving out of the bottom
-            break;
-        case 'ArrowLeft':
-            if (ballX > 0) ballX -= 10; // Prevent moving out of the left
-            break;
-        case 'ArrowRight':
-            if (ballX < stadiumRect.width - ball.offsetWidth) ballX += 10; // Prevent moving out of the right
-            break;
-        case ' ':
-            kickBall(); // Kick ball with spacebar
-            return;
-    }
-    updateBallPosition();
+// Ball Click Event
+ball.addEventListener('click', () => {
+    kickBall();
 });
 
 // Kick Ball Function
 function kickBall() {
-    const ballRect = ball.getBoundingClientRect();
-    const goalRect = goal.getBoundingClientRect();
+    const ballPosition = ball.getBoundingClientRect();
+    const goalPosition = goal.getBoundingClientRect();
 
-    if (
-        ballRect.right < goalRect.right &&
-        ballRect.left > goalRect.left &&
-        ballRect.bottom < goalRect.bottom
-    ) {
-        score++;
-        scoreDisplay.textContent = `Score: ${score}`;
-        displayMessage('Goal!', 'green');
-    } else {
-        displayMessage('No goal!', 'red');
-    }
-}
+    // Move the ball toward the goal
+    ball.style.transform = `translateY(${goalPosition.top - ballPosition.top - 10}px)`;
 
-// Display Feedback Message
-function displayMessage(text, color) {
-    messageDisplay.textContent = text;
-    messageDisplay.style.color = color;
-
+    // Check if the ball lands in the goal
     setTimeout(() => {
-        messageDisplay.textContent = ''; // Clear message after 2 seconds
-    }, 2000);
+        const ballRect = ball.getBoundingClientRect();
+        if (
+            ballRect.right < goalPosition.right &&
+            ballRect.left > goalPosition.left &&
+            ballRect.bottom < goalPosition.bottom
+        ) {
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+            alert('Goal!');
+        } else {
+            alert('Miss!');
+        }
+        resetBall();
+    }, 500);
 }
 
-// Initialize Game
-initializeBallPosition();
+// Reset Ball Position
+function resetBall() {
+    ball.style.transform = 'translateY(0)';
+}
