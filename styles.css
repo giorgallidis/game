@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -17,21 +16,30 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.goal {
+.goal-area {
     position: relative;
     width: 300px;
     height: 150px;
     margin: 20px auto;
-    border: 2px solid #333;
     background: #90EE90;
+    border: 2px solid #333;
     border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.goal-img {
-    width: 100%;
+.goal-post {
+    width: 10px;
+    height: 150px;
+    background: #333;
+}
+
+.goal {
+    width: 200px;
     height: 100%;
-    object-fit: cover;
-    opacity: 0.5;
+    background: rgba(255, 255, 255, 0.7);
+    position: relative;
 }
 
 .ball {
@@ -40,9 +48,10 @@ body {
     height: 40px;
     background: url('soccer-ball.png') no-repeat center/contain;
     border-radius: 50%;
-    cursor: grab;
     top: 60%;
     left: 45%;
+    cursor: pointer;
+    transition: transform 0.5s ease;
 }
 
 #score {
