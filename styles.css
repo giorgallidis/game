@@ -22,11 +22,6 @@ body {
     font-weight: bold;
 }
 
-#message {
-    font-size: 18px;
-    color: red;
-}
-
 /* Stadium and Fans */
 .stadium {
     position: relative;
