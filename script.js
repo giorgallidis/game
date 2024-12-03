@@ -1,32 +1,53 @@
 const ball = document.getElementById('ball');
 const scoreDisplay = document.getElementById('score');
 const messageDisplay = document.getElementById('message');
+const stadium = document.querySelector('.stadium');
 const goal = document.querySelector('.goal');
 
-// Ball movement variables
-let ballX = 150; // Starting X position
-let ballY = 300; // Starting Y position
+let ballX, ballY; // Ball position variables
+let stadiumRect; // Stadium boundaries
 
-// Set initial position of the ball
+// Initialize Ball Position
+function initializeBallPosition() {
+    stadiumRect = stadium.getBoundingClientRect();
+
+    // Calculate the center of the stadium
+    const centerX = (stadiumRect.width - ball.offsetWidth) / 2;
+    const centerY = (stadiumRect.height - ball.offsetHeight) / 2;
+
+    // Set initial ball position
+    ballX = centerX;
+    ballY = centerY;
+
+    updateBallPosition();
+}
+
+// Update Ball Position on Screen
 function updateBallPosition() {
     ball.style.left = `${ballX}px`;
     ball.style.top = `${ballY}px`;
 }
 
-// Add event listener for keyboard actions
+// Ball Movement Handler
 document.addEventListener('keydown', (event) => {
     const key = event.key;
 
-    if (key === 'ArrowUp' && ballY > 50) {
-        ballY -= 10; // Move ball up
-    } else if (key === 'ArrowDown' && ballY < 450) {
-        ballY += 10; // Move ball down
-    } else if (key === 'ArrowLeft' && ballX > 10) {
-        ballX -= 10; // Move ball left
-    } else if (key === 'ArrowRight' && ballX < 290) {
-        ballX += 10; // Move ball right
-    } else if (key === ' ') {
-        kickBall(); // Spacebar to kick the ball
+    switch (key) {
+        case 'ArrowUp':
+            if (ballY > 0) ballY -= 10; // Prevent moving out of the top
+            break;
+        case 'ArrowDown':
+            if (ballY < stadiumRect.height - ball.offsetHeight) ballY += 10; // Prevent moving out of the bottom
+            break;
+        case 'ArrowLeft':
+            if (ballX > 0) ballX -= 10; // Prevent moving out of the left
+            break;
+        case 'ArrowRight':
+            if (ballX < stadiumRect.width - ball.offsetWidth) ballX += 10; // Prevent moving out of the right
+            break;
+        case ' ':
+            kickBall(); // Kick ball with spacebar
+            return;
     }
     updateBallPosition();
 });
@@ -49,15 +70,15 @@ function kickBall() {
     }
 }
 
-// Display feedback message
+// Display Feedback Message
 function displayMessage(text, color) {
     messageDisplay.textContent = text;
     messageDisplay.style.color = color;
 
     setTimeout(() => {
-        messageDisplay.textContent = ''; // Clear the message after 2 seconds
+        messageDisplay.textContent = ''; // Clear message after 2 seconds
     }, 2000);
 }
 
-// Initialize ball position
-updateBallPosition();
+// Initialize Game
+initializeBallPosition();
